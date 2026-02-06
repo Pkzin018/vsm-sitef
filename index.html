@@ -4,6 +4,9 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VSM | Conc SiTEF</title>
+    
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><radialGradient id=%22g%22 cx=%2250%%22 cy=%2250%%22 r=%2250%%22><stop offset=%220%%22 stop-color=%22%233b82f6%22 stop-opacity=%220.3%22/><stop offset=%22100%%22 stop-color=%22%23020203%22 stop-opacity=%221%22/></radialGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22url(%23g)%22/><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22none%22 stroke=%22%233b82f6%22 stroke-width=%223%22 stroke-dasharray=%22150 100%22/><text y=%2250%%22 x=%2250%%22 font-size=%2252%22 fill=%22%23ffffff%22 font-family=%22sans-serif%22 font-weight=%22900%22 text-anchor=%22middle%22 dy=%22.35em%22 style=%22text-shadow: 0 0 15px %233b82f6;%22>V</text></svg>">
+    
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
     
@@ -27,33 +30,90 @@
             background-color: var(--bg-dark);
             color: var(--text-primary);
             min-height: 100vh;
-            background-image: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.05) 0%, transparent 50%);
+            background-image: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
             overflow-x: hidden;
         }
 
         .wrapper { max-width: 1440px; margin: 0 auto; padding: 40px; }
 
+        /* HEADER & LOGO */
         header {
             display: flex;
             justify-content: space-between;
             align-items: center;
             margin-bottom: 50px;
-            padding-bottom: 20px;
+            padding-bottom: 25px;
             border-bottom: 1px solid var(--border);
         }
 
-        .brand h1 { font-weight: 800; font-size: 1.6rem; letter-spacing: -1px; text-transform: uppercase; }
-        .brand span { 
-            color: var(--accent-blue); 
-            text-shadow: 0 0 20px rgba(59, 130, 246, 0.8);
-            animation: pulse-glow 2s infinite alternate;
+        .brand-container {
+            display: flex;
+            align-items: center;
+            gap: 20px;
         }
 
-        @keyframes pulse-glow {
-            from { text-shadow: 0 0 10px rgba(59, 130, 246, 0.6); filter: brightness(1); }
-            to { text-shadow: 0 0 25px rgba(59, 130, 246, 1); filter: brightness(1.3); }
+        .logo-icon {
+            width: 52px;
+            height: 52px;
+            background: rgba(59, 130, 246, 0.05);
+            border: 1.5px solid rgba(59, 130, 246, 0.4);
+            border-radius: 14px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            backdrop-filter: blur(5px);
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(59, 130, 246, 0.1);
+            overflow: hidden;
         }
 
+        .logo-icon::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: conic-gradient(from 0deg, transparent, var(--accent-blue), transparent 30%);
+            animation: rotate 4s linear infinite;
+            opacity: 0.3;
+        }
+
+        @keyframes rotate { 100% { transform: rotate(360deg); } }
+
+        .logo-icon::after {
+            content: 'V';
+            font-weight: 800;
+            color: #fff;
+            font-size: 1.8rem;
+            z-index: 2;
+            text-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
+        }
+
+        .brand-text h1 {
+            font-weight: 800;
+            font-size: 1.9rem;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .brand-text span { 
+            color: var(--accent-blue);
+            background: linear-gradient(135deg, #fff 30%, var(--accent-blue));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .brand-text p {
+            color: var(--text-secondary);
+            font-size: 0.7rem;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-top: 6px;
+            font-weight: 600;
+        }
+
+        /* UPLOAD AREA */
         .upload-area {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -64,17 +124,21 @@
         .drop-box {
             background: var(--card-dark);
             border: 1px solid var(--border);
-            border-radius: 16px;
-            padding: 30px;
+            border-radius: 20px;
+            padding: 35px;
             cursor: pointer;
             transition: var(--transition);
-            position: relative;
-            overflow: hidden;
         }
 
-        .drop-box:hover { border-color: var(--accent-blue); background: rgba(59, 130, 246, 0.02); }
-        .drop-box.success { border-color: var(--accent-neon); box-shadow: 0 0 20px rgba(0, 255, 157, 0.05); }
+        .drop-box:hover { 
+            border-color: rgba(59, 130, 246, 0.5); 
+            background: rgba(59, 130, 246, 0.03);
+            transform: translateY(-2px);
+        }
+        
+        .drop-box.success { border-color: var(--accent-neon); }
 
+        /* KPI GRID */
         .kpi-grid {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
@@ -83,16 +147,16 @@
         }
 
         .kpi-card {
-            background: var(--card-dark);
+            background: linear-gradient(145deg, #0a0a0c, #111114);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 24px;
             padding: 24px;
-            backdrop-filter: blur(10px);
         }
 
-        .kpi-card label { color: var(--text-secondary); font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 1px; }
-        .kpi-card .number { font-size: 2.5rem; font-weight: 800; margin-top: 10px; font-variant-numeric: tabular-nums; }
+        .kpi-card label { color: var(--text-secondary); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
+        .kpi-card .number { font-size: 2.8rem; font-weight: 800; margin-top: 10px; font-variant-numeric: tabular-nums; }
 
+        /* CONTROLS */
         .controls-row {
             display: flex;
             justify-content: space-between;
@@ -106,20 +170,18 @@
             width: 100%;
             background: var(--card-dark);
             border: 1px solid var(--border);
-            padding: 14px 20px 14px 45px;
-            border-radius: 12px;
+            padding: 16px 20px 16px 50px;
+            border-radius: 16px;
             color: white;
             outline: none;
-            transition: var(--transition);
         }
-        .search-wrapper input:focus { border-color: var(--accent-blue); box-shadow: 0 0 15px rgba(59, 130, 246, 0.1); }
-        .search-wrapper::before { content: '🔍'; position: absolute; left: 18px; top: 14px; opacity: 0.5; }
+        .search-wrapper::before { content: '🔍'; position: absolute; left: 20px; top: 16px; opacity: 0.4; }
 
         .filter-group {
             display: flex;
-            background: rgba(255, 255, 255, 0.02);
-            padding: 5px;
-            border-radius: 14px;
+            background: #111114;
+            padding: 6px;
+            border-radius: 16px;
             border: 1px solid var(--border);
         }
 
@@ -127,50 +189,46 @@
             background: transparent;
             border: none;
             color: var(--text-secondary);
-            padding: 10px 20px;
-            border-radius: 10px;
+            padding: 12px 24px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 0.75rem;
+            font-size: 0.8rem;
             font-weight: 700;
-            transition: var(--transition);
         }
 
-        .filter-btn.active {
-            background: rgba(59, 130, 246, 0.15);
-            color: #fff;
-            border: 1px solid rgba(59, 130, 246, 0.4);
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4);
-        }
+        .filter-btn.active { background: var(--accent-blue); color: #fff; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
 
+        /* TABLE */
         .data-section {
             background: var(--card-dark);
             border: 1px solid var(--border);
-            border-radius: 20px;
+            border-radius: 24px;
             overflow: hidden;
         }
 
         table { width: 100%; border-collapse: collapse; }
-        th { padding: 20px; background: rgba(255,255,255,0.02); text-align: left; color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; border-bottom: 1px solid var(--border); }
-        td { padding: 16px 20px; font-size: 0.85rem; border-bottom: 1px solid var(--border); transition: 0.2s; }
-        
-        tr:hover td { background: rgba(59, 130, 246, 0.03); color: #fff; cursor: default; }
+        th { padding: 22px; background: rgba(255,255,255,0.02); text-align: left; color: var(--text-secondary); font-size: 0.75rem; border-bottom: 1px solid var(--border); }
+        td { padding: 18px 22px; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
+        tr:hover td { background: rgba(59, 130, 246, 0.04); }
 
-        .status-tag { padding: 5px 12px; border-radius: 6px; font-size: 0.65rem; font-weight: 800; }
-        .tag-active { background: rgba(0, 255, 157, 0.1); color: var(--accent-neon); }
-        .tag-error { background: rgba(255, 71, 87, 0.1); color: var(--accent-red); }
+        .status-tag { padding: 6px 14px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; }
+        .tag-active { background: rgba(0, 255, 157, 0.08); color: var(--accent-neon); border: 1px solid rgba(0, 255, 157, 0.2); }
+        .tag-error { background: rgba(255, 71, 87, 0.08); color: var(--accent-red); border: 1px solid rgba(255, 71, 87, 0.2); }
 
-        .btn-action { background: var(--accent-blue); color: white; border: none; padding: 12px 24px; border-radius: 10px; font-weight: 700; cursor: pointer; transition: var(--transition); }
-        .btn-action:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(59, 130, 246, 0.4); }
-
+        .btn-action { background: var(--accent-blue); color: white; border: none; padding: 14px 28px; border-radius: 14px; font-weight: 700; cursor: pointer; transition: var(--transition); }
+        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); }
     </style>
 </head>
 <body>
 
 <div class="wrapper">
     <header>
-        <div class="brand">
-            <h1>VSM<span>.INFO</span></h1>
-            <p style="color:var(--text-secondary); font-size: 0.7rem; letter-spacing: 1px;">Sistema de Auditoria Inteligente</p>
+        <div class="brand-container">
+            <div class="logo-icon"></div>
+            <div class="brand-text">
+                <h1>VSM<span>.INFO</span></h1>
+                <p>SiTEF Intelligence Reconciliation</p>
+            </div>
         </div>
         <div style="display:flex; gap:12px;">
             <button class="btn-action" id="exportBtn" style="display:none" onclick="exportExcel()">EXPORTAR RELATÓRIO</button>
@@ -180,13 +238,15 @@
 
     <div class="upload-area">
         <div class="drop-box" id="upSist" onclick="document.getElementById('inSist').click()">
-            <h3>01. BASE SQL (METABASE)</h3>
-            <p id="txtSist">Arraste ou clique para importar CSV/XLSX</p>
+            <h3 style="font-size: 0.8rem; color: var(--accent-blue); letter-spacing: 1px; margin-bottom: 10px;">PASSO 01</h3>
+            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">BASE SQL (METABASE)</h2>
+            <p id="txtSist">Importar CSV/XLSX do Sistema</p>
             <input type="file" id="inSist" hidden accept=".csv, .xlsx">
         </div>
         <div class="drop-box" id="upPlan" onclick="document.getElementById('inPlan').click()">
-            <h3>02. SOFTWARE EXPRESS</h3>
-            <p id="txtPlan">Arraste ou clique para importar o faturamento</p>
+            <h3 style="font-size: 0.8rem; color: var(--accent-blue); letter-spacing: 1px; margin-bottom: 10px;">PASSO 02</h3>
+            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">SOFTWARE EXPRESS</h2>
+            <p id="txtPlan">Importar Planilha de Faturamento</p>
             <input type="file" id="inPlan" hidden accept=".xlsx, .csv">
         </div>
     </div>
@@ -200,12 +260,11 @@
 
     <div class="controls-row" id="controls" style="display: none;">
         <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Pesquisar por Loja ou CNPJ..." onkeyup="filterTable()">
+            <input type="text" id="searchInput" placeholder="Pesquisar loja ou CNPJ..." onkeyup="filterTable()">
         </div>
         <div class="filter-group">
             <button class="filter-btn active" onclick="applyTypeFilter('ALL', this)">Todos</button>
             <button class="filter-btn" onclick="applyTypeFilter('DIVERGENTE', this)">Divergentes</button>
-            <button class="filter-btn" onclick="applyTypeFilter('ACTIVE', this)">Ativos VSM</button>
         </div>
     </div>
 
@@ -221,7 +280,7 @@
                 </tr>
             </thead>
             <tbody id="mainTable">
-                <tr><td colspan="5" style="text-align:center; padding:80px; color:var(--text-secondary); opacity: 0.3;">AGUARDANDO STREAM DE DADOS...</td></tr>
+                <tr><td colspan="5" style="text-align:center; padding:100px; color:var(--text-secondary);">AGUARDANDO STREAM DE DADOS...</td></tr>
             </tbody>
         </table>
     </div>
@@ -230,7 +289,6 @@
 <script>
     let dbSist = new Map(), dbPlan = [], finalData = [], currentFilter = 'ALL';
 
-    // Persistência: Carregar dados ao iniciar
     window.onload = () => {
         const saved = localStorage.getItem('vsm_audit_cache');
         if (saved) {
@@ -240,7 +298,7 @@
     };
 
     const clean = c => String(c || '').replace(/\D/g, '').trim();
-    const money = v => { if (!v) return 0; return parseFloat(String(v).replace(/[R$\s.]/g, '').replace(',', '.')) || 0; };
+    const money = v => parseFloat(String(v || 0).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
 
     const process = (f, cb) => {
         const r = new FileReader();
@@ -254,9 +312,12 @@
     document.getElementById('inSist').onchange = e => {
         process(e.target.files[0], rows => {
             dbSist.clear();
-            rows.forEach(r => { const cnpj = clean(r['CNPJ'] || r['cnpj']); if(cnpj) dbSist.set(cnpj, true); });
+            rows.forEach(r => { 
+                const cnpj = clean(r['CNPJ'] || r['cnpj']); 
+                if(cnpj) dbSist.set(cnpj, true); 
+            });
             document.getElementById('upSist').classList.add('success');
-            document.getElementById('txtSist').innerText = "✓ BANCO DE DADOS CONECTADO";
+            document.getElementById('txtSist').innerHTML = "<b style='color:#00ff9d'>✓ SQL CONECTADO</b>";
             audit();
         });
     };
@@ -265,24 +326,30 @@
         process(e.target.files[0], rows => {
             dbPlan = [];
             rows.forEach(r => {
-                const cnpj = clean(r['Cnpj/Cpf Loja']); if(!cnpj) return;
+                const cnpj = clean(r['Cnpj/Cpf Loja']); 
+                if(!cnpj) return;
                 const active = money(r['Total Cobrança']) > 0 || (parseInt(r['Transacoes Efetuadas']) || 0) > 0;
                 if (active && !dbPlan.find(x => x.cnpj === cnpj)) dbPlan.push({ cnpj, nome: r['Nome Loja'] });
             });
             document.getElementById('upPlan').classList.add('success');
-            document.getElementById('txtPlan').innerText = "✓ FATURAMENTO CARREGADO";
+            document.getElementById('txtPlan').innerHTML = "<b style='color:#00ff9d'>✓ SE CONECTADO</b>";
             audit();
         });
     };
 
     function audit() {
         if(dbSist.size === 0 || dbPlan.length === 0) return;
-        finalData = []; let ok = 0;
+        finalData = [];
         dbPlan.forEach(p => {
-            const match = dbSist.has(p.cnpj); if(match) ok++;
-            finalData.push({ cnpj: p.cnpj, nome: p.nome, statusSE: 'ATIVO', statusVSM: match ? 'ATIVO' : 'FINALIZADO', diag: match ? 'OK' : 'DIVERGENTE' });
+            const match = dbSist.has(p.cnpj);
+            finalData.push({ 
+                cnpj: p.cnpj, 
+                nome: p.nome, 
+                statusSE: 'ATIVO', 
+                statusVSM: match ? 'ATIVO' : 'TERMINATED', 
+                diag: match ? 'OK' : 'DIVERGENTE' 
+            });
         });
-        
         localStorage.setItem('vsm_audit_cache', JSON.stringify(finalData));
         restoreUI();
     }
@@ -313,29 +380,20 @@
     function filterTable() {
         const search = document.getElementById('searchInput').value.toUpperCase();
         let filtered = finalData;
-
         if (currentFilter === 'DIVERGENTE') filtered = filtered.filter(d => d.diag === 'DIVERGENTE');
-        if (currentFilter === 'ACTIVE') filtered = filtered.filter(d => d.statusVSM === 'ATIVO');
-
-        if (search) {
-            filtered = filtered.filter(d => d.nome.toUpperCase().includes(search) || d.cnpj.includes(search));
-        }
+        if (search) filtered = filtered.filter(d => d.nome.toUpperCase().includes(search) || d.cnpj.includes(search));
         renderTable(filtered);
     }
 
     function renderTable(data) {
         const body = document.getElementById('mainTable');
-        if (data.length === 0) {
-            body.innerHTML = `<tr><td colspan="5" style="text-align:center; padding:40px; color:var(--accent-red)">NENHUM REGISTRO ENCONTRADO</td></tr>`;
-            return;
-        }
         body.innerHTML = data.map(i => `
             <tr>
-                <td class="cnpj-txt">${i.cnpj}</td>
-                <td style="font-weight:600">${i.nome.toLowerCase()}</td>
-                <td><span class="status-tag tag-active">ATIVO SE</span></td>
+                <td style="font-family:'JetBrains Mono'; font-weight: 500; color: var(--accent-blue)">${i.cnpj}</td>
+                <td style="font-weight:700; text-transform: uppercase;">${i.nome}</td>
+                <td><span class="status-tag tag-active">ATIVO</span></td>
                 <td><span class="status-tag ${i.statusVSM==='ATIVO'?'tag-active':'tag-error'}">${i.statusVSM}</span></td>
-                <td style="font-weight:700; color:${i.diag==='OK'?'var(--accent-neon)':'var(--accent-red)'}">${i.diag}</td>
+                <td style="font-weight:800; color:${i.diag==='OK'?'var(--accent-neon)':'var(--accent-red)'}">${i.diag}</td>
             </tr>
         `).join('');
     }
@@ -344,7 +402,7 @@
         const ws = XLSX.utils.json_to_sheet(finalData);
         const wb = XLSX.utils.book_new();
         XLSX.utils.book_append_sheet(wb, ws, "Auditoria_VSM");
-        XLSX.writeFile(wb, "Relatorio_Faturamento_VSM.xlsx");
+        XLSX.writeFile(wb, "VSM_Audit_Report.xlsx");
     }
 </script>
 </body>

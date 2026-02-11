@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>VSM | Conc SiTEF</title>
     
-    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><defs><radialGradient id=%22g%22 cx=%2250%%22 cy=%2250%%22 r=%2250%%22><stop offset=%220%%22 stop-color=%22%233b82f6%22 stop-opacity=%220.3%22/><stop offset=%22100%%22 stop-color=%22%23020203%22 stop-opacity=%221%22/></radialGradient></defs><circle cx=%2250%22 cy=%2250%22 r=%2248%22 fill=%22url(%23g)%22/><circle cx=%2250%22 cy=%2250%22 r=%2242%22 fill=%22none%22 stroke=%22%233b82f6%22 stroke-width=%223%22 stroke-dasharray=%22150 100%22/><text y=%2250%%22 x=%2250%%22 font-size=%2252%22 fill=%22%23ffffff%22 font-family=%22sans-serif%22 font-weight=%22900%22 text-anchor=%22middle%22 dy=%22.35em%22 style=%22text-shadow: 0 0 15px %233b82f6;%22>V</text></svg>">
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><circle cx=%2250%22 cy=%2250%22 r=%2245%22 fill=%22none%22 stroke=%22%233b82f6%22 stroke-width=%225%22/><text y=%2250%%22 x=%2250%%22 font-size=%2255%22 fill=%22%233b82f6%22 font-family=%22Arial%22 font-weight=%22900%22 text-anchor=%22middle%22 dy=%22.35em%22 style=%22text-shadow: 0 0 10px %233b82f6;%22>V</text></svg>">
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;600;800&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
@@ -23,200 +23,98 @@
             --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
-        * { margin: 0; padding: 0; box-sizing: border-box; }
+        /* ANIMAÇÃO DE MOVIMENTO APENAS PARA A LOGO */
+        @keyframes logoGlow {
+            0% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); }
+            50% { box-shadow: 0 0 25px rgba(59, 130, 246, 0.6); border-color: var(--accent-blue); }
+            100% { box-shadow: 0 0 10px rgba(59, 130, 246, 0.2); border-color: rgba(59, 130, 246, 0.4); }
+        }
 
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background-color: var(--bg-dark);
-            color: var(--text-primary);
-            min-height: 100vh;
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Plus Jakarta Sans', sans-serif; 
+            background-color: var(--bg-dark); 
+            color: var(--text-primary); 
+            min-height: 100vh; 
             background-image: radial-gradient(circle at 0% 0%, rgba(59, 130, 246, 0.08) 0%, transparent 50%);
-            overflow-x: hidden;
         }
 
         .wrapper { max-width: 1440px; margin: 0 auto; padding: 40px; }
 
-        /* HEADER & LOGO */
-        header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 50px;
-            padding-bottom: 25px;
-            border-bottom: 1px solid var(--border);
+        /* HEADER */
+        header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 50px; padding-bottom: 25px; border-bottom: 1px solid var(--border); }
+        .brand-container { display: flex; align-items: center; gap: 20px; }
+        
+        /* LOGO COM MOVIMENTAÇÃO DE BRILHO */
+        .logo-icon { 
+            width: 52px; height: 52px; 
+            background: rgba(59, 130, 246, 0.1); 
+            border: 1.5px solid rgba(59, 130, 246, 0.4); 
+            border-radius: 14px; 
+            display: flex; align-items: center; justify-content: center; 
+            animation: logoGlow 3s infinite ease-in-out; /* Movimento de luz restrito aqui */
         }
+        .logo-icon::after { content: 'V'; font-weight: 800; color: #fff; font-size: 1.8rem; text-shadow: 0 0 10px var(--accent-blue); }
 
-        .brand-container {
-            display: flex;
-            align-items: center;
-            gap: 20px;
-        }
+        .brand-text h1 { font-weight: 800; font-size: 1.9rem; letter-spacing: -1px; line-height: 1; }
+        .brand-text span { color: var(--accent-blue); }
+        .brand-text p { color: var(--text-secondary); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 3px; margin-top: 6px; font-weight: 600; }
 
-        .logo-icon {
-            width: 52px;
-            height: 52px;
-            background: rgba(59, 130, 246, 0.05);
-            border: 1.5px solid rgba(59, 130, 246, 0.4);
-            border-radius: 14px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            position: relative;
-            backdrop-filter: blur(5px);
-            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.4), 0 0 15px rgba(59, 130, 246, 0.1);
-            overflow: hidden;
-        }
-
-        .logo-icon::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: conic-gradient(from 0deg, transparent, var(--accent-blue), transparent 30%);
-            animation: rotate 4s linear infinite;
-            opacity: 0.3;
-        }
-
-        @keyframes rotate { 100% { transform: rotate(360deg); } }
-
-        .logo-icon::after {
-            content: 'V';
-            font-weight: 800;
-            color: #fff;
-            font-size: 1.8rem;
-            z-index: 2;
-            text-shadow: 0 0 10px rgba(59, 130, 246, 0.8);
-        }
-
-        .brand-text h1 {
-            font-weight: 800;
-            font-size: 1.9rem;
-            letter-spacing: -1px;
-            line-height: 1;
-        }
-
-        .brand-text span { 
-            color: var(--accent-blue);
-            background: linear-gradient(135deg, #fff 30%, var(--accent-blue));
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-        }
-
-        .brand-text p {
-            color: var(--text-secondary);
-            font-size: 0.7rem;
-            text-transform: uppercase;
-            letter-spacing: 3px;
-            margin-top: 6px;
-            font-weight: 600;
-        }
-
-        /* UPLOAD AREA */
-        .upload-area {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 24px;
-            margin-bottom: 40px;
-        }
-
-        .drop-box {
-            background: var(--card-dark);
-            border: 1px solid var(--border);
-            border-radius: 20px;
-            padding: 35px;
-            cursor: pointer;
+        /* CARDS PASSO A PASSO */
+        .upload-area { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px; }
+        .drop-box { 
+            background: var(--card-dark); 
+            border: 1px solid var(--border); 
+            border-radius: 20px; 
+            padding: 35px; 
             transition: var(--transition);
         }
+        .drop-box.success { border-color: var(--accent-neon); background: rgba(0, 255, 157, 0.02); }
 
-        .drop-box:hover { 
-            border-color: rgba(59, 130, 246, 0.5); 
-            background: rgba(59, 130, 246, 0.03);
-            transform: translateY(-2px);
-        }
+        /* KPIS - DESTAQUE EM VERMELHO PARA DIVERGÊNCIAS */
+        .kpi-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+        .kpi-card { background: #0a0a0c; border: 1px solid var(--border); border-radius: 24px; padding: 24px; }
+        .kpi-card label { color: var(--text-secondary); font-size: 0.75rem; text-transform: uppercase; font-weight: 700; }
+        .kpi-card .number { font-size: 2.8rem; font-weight: 800; margin-top: 10px; color: #fff; }
         
-        .drop-box.success { border-color: var(--accent-neon); }
+        /* Estilo específico para o card de divergência */
+        .kpi-card.divergent-highlight { border-color: rgba(255, 71, 87, 0.3); background: rgba(255, 71, 87, 0.02); }
+        .kpi-card.divergent-highlight .number { color: var(--accent-red); text-shadow: 0 0 15px rgba(255, 71, 87, 0.4); }
 
-        /* KPI GRID */
-        .kpi-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .kpi-card {
-            background: linear-gradient(145deg, #0a0a0c, #111114);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            padding: 24px;
-        }
-
-        .kpi-card label { color: var(--text-secondary); font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; }
-        .kpi-card .number { font-size: 2.8rem; font-weight: 800; margin-top: 10px; font-variant-numeric: tabular-nums; }
-
-        /* CONTROLS */
-        .controls-row {
-            display: flex;
-            justify-content: space-between;
+        /* FILTROS */
+        .filter-bar { 
+            display: flex; gap: 12px; margin-bottom: 20px; 
+            background: var(--card-dark); padding: 12px; 
+            border-radius: 18px; border: 1px solid var(--border); 
             align-items: center;
-            margin-bottom: 25px;
-            gap: 20px;
         }
-
-        .search-wrapper { flex: 1; position: relative; }
-        .search-wrapper input {
-            width: 100%;
-            background: var(--card-dark);
-            border: 1px solid var(--border);
-            padding: 16px 20px 16px 50px;
-            border-radius: 16px;
-            color: white;
-            outline: none;
+        .search-input { 
+            flex: 1; background: rgba(255,255,255,0.03); 
+            border: 1px solid var(--border); padding: 12px 20px; 
+            border-radius: 12px; color: white; outline: none;
         }
-        .search-wrapper::before { content: '🔍'; position: absolute; left: 20px; top: 16px; opacity: 0.4; }
-
-        .filter-group {
-            display: flex;
-            background: #111114;
-            padding: 6px;
-            border-radius: 16px;
-            border: 1px solid var(--border);
+        .filter-btn { 
+            padding: 10px 24px; border-radius: 12px; 
+            border: 1px solid var(--border); background: transparent; 
+            color: var(--text-secondary); cursor: pointer; font-weight: 700; 
         }
+        .filter-btn.active { background: var(--accent-blue); color: white; border-color: var(--accent-blue); }
 
-        .filter-btn {
-            background: transparent;
-            border: none;
-            color: var(--text-secondary);
-            padding: 12px 24px;
-            border-radius: 12px;
-            cursor: pointer;
-            font-size: 0.8rem;
-            font-weight: 700;
-        }
-
-        .filter-btn.active { background: var(--accent-blue); color: #fff; box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3); }
-
-        /* TABLE */
-        .data-section {
-            background: var(--card-dark);
-            border: 1px solid var(--border);
-            border-radius: 24px;
-            overflow: hidden;
-        }
-
+        /* TABELA */
+        .data-section { background: var(--card-dark); border: 1px solid var(--border); border-radius: 24px; overflow: hidden; }
         table { width: 100%; border-collapse: collapse; }
         th { padding: 22px; background: rgba(255,255,255,0.02); text-align: left; color: var(--text-secondary); font-size: 0.75rem; border-bottom: 1px solid var(--border); }
-        td { padding: 18px 22px; font-size: 0.9rem; border-bottom: 1px solid var(--border); }
-        tr:hover td { background: rgba(59, 130, 246, 0.04); }
-
-        .status-tag { padding: 6px 14px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; }
-        .tag-active { background: rgba(0, 255, 157, 0.08); color: var(--accent-neon); border: 1px solid rgba(0, 255, 157, 0.2); }
-        .tag-error { background: rgba(255, 71, 87, 0.08); color: var(--accent-red); border: 1px solid rgba(255, 71, 87, 0.2); }
-
-        .btn-action { background: var(--accent-blue); color: white; border: none; padding: 14px 28px; border-radius: 14px; font-weight: 700; cursor: pointer; transition: var(--transition); }
-        .btn-action:hover { filter: brightness(1.1); transform: translateY(-2px); box-shadow: 0 10px 20px rgba(59, 130, 246, 0.3); }
+        td { padding: 18px 22px; border-bottom: 1px solid var(--border); font-size: 0.9rem; }
+        
+        .status-tag { padding: 6px 14px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; }
+        .tag-active { background: rgba(0, 255, 157, 0.1); color: var(--accent-neon); border: 1px solid rgba(0, 255, 157, 0.2); }
+        .tag-error { background: rgba(255, 71, 87, 0.1); color: var(--accent-red); border: 1px solid rgba(255, 71, 87, 0.2); }
+        
+        .btn-action { 
+            background: var(--accent-blue); color: white; border: none; 
+            padding: 14px 28px; border-radius: 14px; font-weight: 700; 
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
@@ -232,39 +130,36 @@
         </div>
         <div style="display:flex; gap:12px;">
             <button class="btn-action" id="exportBtn" style="display:none" onclick="exportExcel()">EXPORTAR RELATÓRIO</button>
-            <button class="btn-action" style="background:transparent; border:1px solid #333; color: #888;" onclick="resetAll()">LIMPAR SESSÃO</button>
+            <button class="btn-action" style="background:transparent; border:1px solid #333; color: #888;" onclick="location.reload()">LIMPAR SESSÃO</button>
         </div>
     </header>
 
     <div class="upload-area">
-        <div class="drop-box" id="upSist" onclick="document.getElementById('inSist').click()">
-            <h3 style="font-size: 0.8rem; color: var(--accent-blue); letter-spacing: 1px; margin-bottom: 10px;">PASSO 01</h3>
-            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">BASE SQL (METABASE)</h2>
-            <p id="txtSist">Importar CSV/XLSX do Sistema</p>
-            <input type="file" id="inSist" hidden accept=".csv, .xlsx">
+        <div class="drop-box" id="upSist">
+            <h3 style="font-size: 0.7rem; color: var(--accent-blue); letter-spacing: 2px;">PASSO 01</h3>
+            <h2 id="statusMetabase">SINCRONIZANDO SQL...</h2>
+            <p id="txtSist" style="font-size: 0.85rem; color: var(--text-secondary);">Aguarde a conexão com o Metabase.</p>
         </div>
-        <div class="drop-box" id="upPlan" onclick="document.getElementById('inPlan').click()">
-            <h3 style="font-size: 0.8rem; color: var(--accent-blue); letter-spacing: 1px; margin-bottom: 10px;">PASSO 02</h3>
-            <h2 style="font-size: 1.2rem; margin-bottom: 5px;">SOFTWARE EXPRESS</h2>
-            <p id="txtPlan">Importar Planilha de Faturamento</p>
-            <input type="file" id="inPlan" hidden accept=".xlsx, .csv">
+        <div class="drop-box" id="upPlan" onclick="document.getElementById('inPlan').click()" style="cursor: pointer;">
+            <h3 style="font-size: 0.7rem; color: var(--accent-blue); letter-spacing: 2px;">PASSO 02</h3>
+            <h2>SOFTWARE EXPRESS</h2>
+            <p id="txtPlan" style="font-size: 0.85rem; color: var(--text-secondary);">Clique para importar faturamento (.xlsx)</p>
+            <input type="file" id="inPlan" hidden accept=".xlsx, .xls">
         </div>
     </div>
 
     <div class="kpi-grid">
         <div class="kpi-card"><label>Total Analisado</label><div class="number" id="kTotal">0</div></div>
         <div class="kpi-card"><label>Em Conformidade</label><div class="number" id="kOk" style="color:var(--accent-neon)">0</div></div>
-        <div class="kpi-card"><label>Divergências</label><div class="number" id="kDiv" style="color:var(--accent-red)">0</div></div>
+        <div class="kpi-card divergent-highlight"><label>Divergências</label><div class="number" id="kDiv">0</div></div>
         <div class="kpi-card"><label>Acuracidade</label><div class="number" id="kHealth" style="color:var(--accent-blue)">--</div></div>
     </div>
 
-    <div class="controls-row" id="controls" style="display: none;">
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="Pesquisar loja ou CNPJ..." onkeyup="filterTable()">
-        </div>
-        <div class="filter-group">
-            <button class="filter-btn active" onclick="applyTypeFilter('ALL', this)">Todos</button>
-            <button class="filter-btn" onclick="applyTypeFilter('DIVERGENTE', this)">Divergentes</button>
+    <div class="filter-bar" id="filterBar" style="display: none;">
+        <input type="text" class="search-input" id="searchInput" placeholder="🔍 Pesquisar loja ou CNPJ..." onkeyup="applyFilters()">
+        <div style="display:flex; gap:8px;">
+            <button class="filter-btn active" id="btnAll" onclick="setFilter('all')">Todos</button>
+            <button class="filter-btn" id="btnDiv" onclick="setFilter('div')">Divergentes</button>
         </div>
     </div>
 
@@ -280,130 +175,121 @@
                 </tr>
             </thead>
             <tbody id="mainTable">
-                <tr><td colspan="5" style="text-align:center; padding:100px; color:var(--text-secondary);">AGUARDANDO STREAM DE DADOS...</td></tr>
+                <tr><td colspan="5" style="text-align:center; padding:80px; color:var(--text-secondary);">AGUARDANDO IMPORTAÇÃO DO PASSO 02...</td></tr>
             </tbody>
         </table>
     </div>
 </div>
 
 <script>
-    let dbSist = new Map(), dbPlan = [], finalData = [], currentFilter = 'ALL';
+    let dbSist = new Set();
+    let dbPlan = [];
+    let currentFilter = 'all'; 
+    
+    const METABASE_URL = "https://api.allorigins.win/raw?url=" + encodeURIComponent("http://dashboard.vsm.com.br/public/question/939a350b-4326-409e-ba67-aeb625626dd1.csv");
 
-    window.onload = () => {
-        const saved = localStorage.getItem('vsm_audit_cache');
-        if (saved) {
-            finalData = JSON.parse(saved);
-            restoreUI();
-        }
-    };
-
-    const clean = c => String(c || '').replace(/\D/g, '').trim();
-    const money = v => parseFloat(String(v || 0).replace(/[R$\s.]/g, '').replace(',', '.')) || 0;
-
-    const process = (f, cb) => {
-        const r = new FileReader();
-        r.onload = e => {
-            const wb = XLSX.read(e.target.result, {type:'binary'});
-            cb(XLSX.utils.sheet_to_json(wb.Sheets[wb.SheetNames[0]]));
-        };
-        r.readAsBinaryString(f);
-    };
-
-    document.getElementById('inSist').onchange = e => {
-        process(e.target.files[0], rows => {
+    async function fetchMetabase() {
+        try {
+            const resp = await fetch(METABASE_URL);
+            const csv = await resp.text();
+            const rows = csv.split('\n').slice(1);
             dbSist.clear();
-            rows.forEach(r => { 
-                const cnpj = clean(r['CNPJ'] || r['cnpj']); 
-                if(cnpj) dbSist.set(cnpj, true); 
+            rows.forEach(row => {
+                const cnpj = row.split(',')[0].replace(/\D/g, '').trim();
+                if(cnpj) dbSist.add(cnpj);
             });
             document.getElementById('upSist').classList.add('success');
-            document.getElementById('txtSist').innerHTML = "<b style='color:#00ff9d'>✓ SQL CONECTADO</b>";
-            audit();
-        });
-    };
+            document.getElementById('statusMetabase').innerText = "BASE SQL CONECTADA";
+            document.getElementById('txtSist').innerHTML = `<b style="color:var(--accent-neon)">✓ ${dbSist.size} CNPJs SINCRONIZADOS</b>`;
+        } catch (e) {
+            document.getElementById('statusMetabase').innerText = "ERRO DE CONEXÃO";
+        }
+    }
 
-    document.getElementById('inPlan').onchange = e => {
-        process(e.target.files[0], rows => {
+    document.getElementById('inPlan').onchange = function(e) {
+        const reader = new FileReader();
+        reader.onload = (evt) => {
+            const wb = XLSX.read(evt.target.result, {type: 'binary'});
+            const ws = wb.Sheets[wb.SheetNames[0]];
+            const data = XLSX.utils.sheet_to_json(ws);
             dbPlan = [];
-            rows.forEach(r => {
-                const cnpj = clean(r['Cnpj/Cpf Loja']); 
-                if(!cnpj) return;
-                const active = money(r['Total Cobrança']) > 0 || (parseInt(r['Transacoes Efetuadas']) || 0) > 0;
-                if (active && !dbPlan.find(x => x.cnpj === cnpj)) dbPlan.push({ cnpj, nome: r['Nome Loja'] });
+            data.forEach(row => {
+                const cnpjKey = Object.keys(row).find(k => k.toLowerCase().includes('cnpj') && k.toLowerCase().includes('loja'));
+                const nomeKey = Object.keys(row).find(k => k.toLowerCase().includes('nome') && k.toLowerCase().includes('loja'));
+                const valorKey = Object.keys(row).find(k => k.toLowerCase().includes('total') && k.toLowerCase().includes('cobr'));
+
+                if (cnpjKey && row[cnpjKey]) {
+                    const cnpjLimpo = String(row[cnpjKey]).replace(/\D/g, '');
+                    const valor = parseFloat(String(row[valorKey] || 0).replace(',', '.'));
+                    
+                    if (cnpjLimpo.length === 14 && cnpjLimpo !== "55649404000283" && valor > 0) {
+                        dbPlan.push({
+                            cnpj: cnpjLimpo,
+                            nome: (row[nomeKey] || "NOME NÃO IDENTIFICADO").toUpperCase(),
+                            vsmStatus: dbSist.has(cnpjLimpo)
+                        });
+                    }
+                }
             });
-            document.getElementById('upPlan').classList.add('success');
-            document.getElementById('txtPlan').innerHTML = "<b style='color:#00ff9d'>✓ SE CONECTADO</b>";
-            audit();
-        });
+
+            if(dbPlan.length > 0) {
+                document.getElementById('upPlan').classList.add('success');
+                document.getElementById('txtPlan').innerHTML = `<b style="color:var(--accent-neon)">✓ ${dbPlan.length} LOJAS IMPORTADAS</b>`;
+                document.getElementById('filterBar').style.display = 'flex';
+                document.getElementById('exportBtn').style.display = "block";
+                applyFilters();
+            }
+        };
+        reader.readAsBinaryString(e.target.files[0]);
     };
 
-    function audit() {
-        if(dbSist.size === 0 || dbPlan.length === 0) return;
-        finalData = [];
-        dbPlan.forEach(p => {
-            const match = dbSist.has(p.cnpj);
-            finalData.push({ 
-                cnpj: p.cnpj, 
-                nome: p.nome, 
-                statusSE: 'ATIVO', 
-                statusVSM: match ? 'ATIVO' : 'TERMINATED', 
-                diag: match ? 'OK' : 'DIVERGENTE' 
-            });
-        });
-        localStorage.setItem('vsm_audit_cache', JSON.stringify(finalData));
-        restoreUI();
-    }
-
-    function restoreUI() {
-        const ok = finalData.filter(d => d.diag === 'OK').length;
-        document.getElementById('kTotal').innerText = finalData.length;
-        document.getElementById('kOk').innerText = ok;
-        document.getElementById('kDiv').innerText = finalData.length - ok;
-        document.getElementById('kHealth').innerText = ((ok/finalData.length)*100).toFixed(1) + '%';
-        document.getElementById('exportBtn').style.display = 'block';
-        document.getElementById('controls').style.display = 'flex';
-        renderTable(finalData);
-    }
-
-    function resetAll() {
-        localStorage.removeItem('vsm_audit_cache');
-        location.reload();
-    }
-
-    function applyTypeFilter(type, btn) {
-        document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    function setFilter(type) {
         currentFilter = type;
-        filterTable();
+        document.getElementById('btnAll').classList.toggle('active', type === 'all');
+        document.getElementById('btnDiv').classList.toggle('active', type === 'div');
+        applyFilters();
     }
 
-    function filterTable() {
-        const search = document.getElementById('searchInput').value.toUpperCase();
-        let filtered = finalData;
-        if (currentFilter === 'DIVERGENTE') filtered = filtered.filter(d => d.diag === 'DIVERGENTE');
-        if (search) filtered = filtered.filter(d => d.nome.toUpperCase().includes(search) || d.cnpj.includes(search));
-        renderTable(filtered);
-    }
+    function applyFilters() {
+        const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+        const tbody = document.getElementById('mainTable');
+        tbody.innerHTML = "";
+        
+        const filtered = dbPlan.filter(item => {
+            const matchesSearch = item.nome.toLowerCase().includes(searchTerm) || item.cnpj.includes(searchTerm);
+            const matchesStatus = currentFilter === 'all' || (currentFilter === 'div' && !item.vsmStatus);
+            return matchesSearch && matchesStatus;
+        });
 
-    function renderTable(data) {
-        const body = document.getElementById('mainTable');
-        body.innerHTML = data.map(i => `
-            <tr>
-                <td style="font-family:'JetBrains Mono'; font-weight: 500; color: var(--accent-blue)">${i.cnpj}</td>
-                <td style="font-weight:700; text-transform: uppercase;">${i.nome}</td>
+        filtered.forEach(item => {
+            const tr = document.createElement('tr');
+            tr.innerHTML = `
+                <td style="font-family:'JetBrains Mono'; color:var(--accent-blue)">${item.cnpj}</td>
+                <td style="font-weight:700">${item.nome}</td>
                 <td><span class="status-tag tag-active">ATIVO</span></td>
-                <td><span class="status-tag ${i.statusVSM==='ATIVO'?'tag-active':'tag-error'}">${i.statusVSM}</span></td>
-                <td style="font-weight:800; color:${i.diag==='OK'?'var(--accent-neon)':'var(--accent-red)'}">${i.diag}</td>
-            </tr>
-        `).join('');
+                <td><span class="status-tag ${item.vsmStatus ? 'tag-active' : 'tag-error'}">${item.vsmStatus ? 'ATIVO' : 'TERMINATED'}</span></td>
+                <td style="font-weight:800; color:${item.vsmStatus ? 'var(--accent-neon)' : 'var(--accent-red)'}">${item.vsmStatus ? 'OK' : 'DIVERGENTE'}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+        updateKPIs();
+    }
+
+    function updateKPIs() {
+        const ok = dbPlan.filter(i => i.vsmStatus).length;
+        document.getElementById('kTotal').innerText = dbPlan.length;
+        document.getElementById('kOk').innerText = ok;
+        document.getElementById('kDiv').innerText = dbPlan.length - ok;
+        document.getElementById('kHealth').innerText = ((ok / dbPlan.length) * 100).toFixed(1) + "%";
     }
 
     function exportExcel() {
-        const ws = XLSX.utils.json_to_sheet(finalData);
-        const wb = XLSX.utils.book_new();
-        XLSX.utils.book_append_sheet(wb, ws, "Auditoria_VSM");
-        XLSX.writeFile(wb, "VSM_Audit_Report.xlsx");
+        const table = document.querySelector("table");
+        const wb = XLSX.utils.table_to_book(table);
+        XLSX.writeFile(wb, "Relatorio_Conciliacao_VSM.xlsx");
     }
+
+    window.onload = fetchMetabase;
 </script>
 </body>
 </html>

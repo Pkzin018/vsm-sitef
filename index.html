@@ -483,34 +483,37 @@
 
 
     async function fetchMetabase() {
+    try {
+        const resp = await fetch(METABASE_URL);
+        if (!resp.ok) throw new Error("Falha na resposta do servidor");
+        
+        const csv = await resp.text();
+        const rows = csv.split(/\r?\n/); // Divide por quebra de linha (Windows/Unix)
+        
+        dbSist.clear();
+        
+        // Começa do 1 para pular o cabeçalho
+        for (let i = 1; i < rows.length; i++) {
+            if (!rows[i].trim()) continue; // Pula linhas vazias
+            
+            const cols = rows[i].split(',');
+            // Remove aspas que o Metabase costuma colocar: "01.234..." -> 01234...
+            const cnpjRaw = cols[0] ? cols[0].replace(/"/g, '').replace(/\D/g, '').trim() : "";
+            
+            if (cnpjRaw) {
+                dbSist.add(cnpjRaw);
+            }
+        }
 
-        try {
-
-            const resp = await fetch(METABASE_URL);
-
-            const csv = await resp.text();
-
-            const rows = csv.split('\n').slice(1);
-
-            dbSist.clear();
-
-            rows.forEach(row => {
-
-                const cnpj = row.split(',')[0].replace(/\D/g, '').trim();
-
-                if(cnpj) dbSist.add(cnpj);
-
-            });
-
-            document.getElementById('upSist').classList.add('active');
-
-            document.getElementById('txtSist').innerHTML = `<b style="color:var(--accent-cyan)">✓ BASE CONECTADA</b>`;
-
-            document.getElementById('sql-status').innerText = "✓ SQL SINCRONIZADO";
-
-        } catch (e) { document.getElementById('sql-status').innerText = "ERRO NA ÓRBITA"; }
-
+        console.log("Sincronizados:", dbSist.size, "CNPJs");
+        document.getElementById('sql-status').innerText = `✓ ${dbSist.size} CONTRATOS SINCRONIZADOS`;
+        document.getElementById('txtSist').innerHTML = `<b style="color:var(--accent-cyan)">✓ BASE ATUALIZADA</b>`;
+        
+    } catch (e) {
+        console.error("Erro de sincronização:", e);
+        document.getElementById('sql-status').innerText = "ERRO NA CONEXÃO SQL";
     }
+}
 
 
 
@@ -657,3 +660,4 @@
 </body>
 
 </html>
+

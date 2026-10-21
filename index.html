@@ -54,10 +54,10 @@
         td:last-child { border-radius: 0 15px 15px 0; border-right: 1px solid var(--glass-border); }
 
         .tag { padding: 6px 14px; border-radius: 8px; font-size: 0.7rem; font-weight: 800; }
-        .tag-ok { background: rgba(0, 242, 255, 0.1); color: var(--accent-cyan); }
-        .tag-err { background: rgba(255, 0, 127, 0.1); color: var(--accent-pink); }
+        .tag-ok { background: rgba(0, 242, 255, 0.1); or: var(--accent-cyan); }
+        .tag-err { background: rgba(255, 0, 127, 0.1); or: var(--accent-pink); }
         
-        .btn-launch { padding: 12px 25px; border-radius: 12px; border: none; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); color: white; font-weight: 800; cursor: pointer; }
+        .btn-launch { padding: 12px 25px; border-radius: 12px; border: none; background: linear-gradient(90deg, var(--accent-blue), var(--accent-cyan)); or: white; font-weight: 800; cursor: pointer; }
         .btn-danger { background: transparent; border: 1px solid var(--accent-pink); color: var(--accent-pink); padding: 10px 20px; border-radius: 12px; cursor: pointer; font-weight: 600; margin-left: 10px; transition: 0.3s; }
         .btn-danger:hover { background: var(--accent-pink); color: white; }
     </style>
@@ -98,7 +98,7 @@
         </div>
         <div class="drop-zone" id="boxSitef" onclick="document.getElementById('inSitef').click()">
             <h3 style="color: var(--accent-pink);">TIPO 02: SITEF</h3>
-            <p id="txtSitef">Carregar Excel (I e J)</p>
+            <p id="txtSitef">Carregar Excel (H e I)</p>
             <input type="file" id="inSitef" hidden accept=".xlsx, .xls">
         </div>
     </div>
@@ -120,8 +120,8 @@
         <table>
             <thead>
                 <tr>
-                    <th>CNPJ (COL. I)</th>
-                    <th>NOME (COL. J)</th>
+                    <th>CNPJ (COL. H)</th>
+                    <th>NOME (COL. I)</th>
                     <th>STATUS VSM</th>
                     <th>DIAGNÓSTICO</th>
                 </tr>
@@ -201,8 +201,8 @@
             let map = new Map();
             rows.forEach((row, i) => {
                 if(i === 0) return;
-                let cnpj = String(row[8] || "").replace(/\D/g, '');
-                let nome = String(row[9] || "").toUpperCase();
+                let cnpj = String(row[7] || "").replace(/\D/g, '');
+                let nome = String(row[8] || "").toUpperCase();
                 if(cnpj.length >= 11) map.set(cnpj, { cnpj, nome });
             });
 
@@ -272,4 +272,3 @@
 </script>
 </body>
 </html>
-

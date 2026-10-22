@@ -174,14 +174,13 @@ body{background:radial-gradient(ellipse at 45% -45%,#27385466,transparent 65%),#
     }
     document.getElementById('tableBody').addEventListener('click',e=>{const button=e.target.closest('.copy-cnpj');if(button)copyCnpj(button);});
 
-    const METABASE_CSV='http://dashboard.vsm.com.br/api/public/card/939a350b-4326-409e-ba67-aeb625626dd1/query/csv?parameters=%5B%5D&format_rows=true&pivot_results=false&csv_include_bom=true';
+    const METABASE_CSV='https://vsm-sitef-proxy.eopkzin.workers.dev/';
     async function syncMetabase(){
         const button=document.getElementById('syncMetabase');
         const status=document.getElementById('syncStatus');
         button.disabled=true;button.textContent='Atualizando…';status.textContent='Consultando a base Metabase…';
         const controller=new AbortController();const timeout=setTimeout(()=>controller.abort(),30000);
         try{
-            if(location.protocol==='https:') throw new Error('Este painel está em HTTPS e a base Metabase está em HTTP. A conexão direta precisa de um intermediário HTTPS ou de HTTPS configurado no Metabase.');
             if(typeof XLSX==='undefined') throw new Error('O leitor de planilhas não carregou. Recarregue a página.');
             const response=await fetch(METABASE_CSV,{signal:controller.signal,credentials:'omit',cache:'no-store'});
             if(!response.ok) throw new Error('Metabase respondeu com erro HTTP '+response.status+'.');
